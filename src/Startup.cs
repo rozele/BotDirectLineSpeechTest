@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
+using Microsoft.Bot.Builder.StreamingExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,7 +32,7 @@ namespace Microsoft.BotBuilderSamples
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Create the Bot Framework Adapter.
-            services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
+            services.AddSingleton<IBotFrameworkHttpAdapter, WebSocketEnabledHttpAdapter>();
 
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, EchoBot>();
@@ -51,7 +52,7 @@ namespace Microsoft.BotBuilderSamples
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
+            app.UseWebSockets();
             app.UseMvc();
         }
     }
